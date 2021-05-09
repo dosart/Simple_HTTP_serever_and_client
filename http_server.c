@@ -37,7 +37,7 @@ int main() {
 
     struct sockaddr client_address;
     while (1) {
-        printf("Server waiting");
+        printf("----------Server waiting----------\n\n");
 
         int client_fd = 0;
         if ((client_fd = accept(server_fd, &client_address, sizeof(client_address))) == -1) {
