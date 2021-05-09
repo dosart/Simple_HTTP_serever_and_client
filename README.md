@@ -1,1 +1,1 @@
-# Simple_HTTP_serever_and_client
+# Simple HTTP serever and client
