@@ -1,4 +1,4 @@
-// Server side C program to demonstrate Socket programming
+// Server side C program to demonstrate socket programming
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
