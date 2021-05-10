@@ -35,8 +35,8 @@ int main(int argc, char const *argv[]) {
 
   int address_len = sizeof(address);
   int client_fd = 0;
-  int bytes_read = 0;
 
+  char *message_to_client = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
   while (1) {
     printf("Server waiting\n\n");
     if ((client_fd = accept(server_fd, (struct sockaddr *)&address,
@@ -46,12 +46,10 @@ int main(int argc, char const *argv[]) {
     }
 
     char buffer[2048] = {0};
-    while (1) {
-      bytes_read = recv(client_fd, buffer, 2048, 0);
-      if (bytes_read <= 0)
-        break;
-    }
-    printf("%s\n", buffer);
+    recv(client_fd, buffer, 2048, 0);
+    send(client_fd, message_to_client, strlen(message_to_client), 0);
+
+    printf("Message from client: %s\n", buffer);
     close(client_fd);
   }
   return 0;
