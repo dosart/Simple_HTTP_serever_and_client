@@ -41,7 +41,7 @@ int main(int argc, char const *argv[]) {
     printf("Server waiting\n\n");
     if ((client_fd = accept(server_fd, (struct sockaddr *)&address,
                             (socklen_t *)&address_len)) == -1) {
-      perror("In accept");
+      perror("error accept");
       exit(EXIT_FAILURE);
     }
 
