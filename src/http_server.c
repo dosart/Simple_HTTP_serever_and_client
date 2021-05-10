@@ -6,7 +6,6 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define PORT 3425
 int main(int argc, char const *argv[]) {
 
   int server_fd;
@@ -15,10 +14,12 @@ int main(int argc, char const *argv[]) {
     exit(EXIT_FAILURE);
   }
 
+  const uint16_t port = 8080;
+
   struct sockaddr_in address;
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = htons(INADDR_ANY);
-  address.sin_port = htons(PORT);
+  address.sin_port = htons(port);
 
   memset(address.sin_zero, 0, sizeof(address.sin_zero));
 
@@ -35,6 +36,7 @@ int main(int argc, char const *argv[]) {
   int address_len = sizeof(address);
   int client_fd = 0;
   int bytes_read = 0;
+
   while (1) {
     printf("Server waiting\n\n");
     if ((client_fd = accept(server_fd, (struct sockaddr *)&address,

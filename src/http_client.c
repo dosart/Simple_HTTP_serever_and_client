@@ -14,7 +14,7 @@ int main() {
     exit(EXIT_FAILURE);
   }
 
-  const uint16_t port = 3425;
+  const uint16_t port = 8080;
 
   struct sockaddr_in server_address;
   server_address.sin_family = AF_INET;
