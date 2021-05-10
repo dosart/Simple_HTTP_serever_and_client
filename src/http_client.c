@@ -31,6 +31,11 @@ int main() {
 
   char *message = "Hello from client";
   send(client_fd, message, strlen(message), 0);
+  
+  char buffer[2048] = {0};
+  recv(client_fd, buffer, 2048, 0);
+  
+  printf("Message from server: %s\n", buffer);
 
   close(client_fd);
   return 0;
