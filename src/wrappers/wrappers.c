@@ -60,3 +60,5 @@ int Getaddrinfo(const char *host, const char *service,
   }
   return status;
 }
+
+void Freeaddrinfo(struct addrinfo *result) { freeaddrinfo(result); }

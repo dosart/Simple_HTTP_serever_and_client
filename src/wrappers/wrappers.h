@@ -20,4 +20,6 @@ int Accept(int listenfd, struct sockaddr *addr, int *addrlen);
 int Getaddrinfo(const char *host, const char *service,
                 const struct addrinfo *hints, struct addrinfo **result);
 
+void Freeaddrinfo(struct addrinfo *result);
+
 #endif
