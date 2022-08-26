@@ -49,3 +49,14 @@ int Accept(int listenfd, struct sockaddr *addr, int *addrlen) {
   }
   return status;
 }
+
+int Getaddrinfo(const char *host, const char *service,
+                const struct addrinfo *hints, struct addrinfo **result) {
+  int status = getaddrinfo(host, service, hints, result);
+  if (status != 0) {
+    errno = status;
+    perror("getaddrinfo");
+    return -1;
+  }
+  return status;
+}
