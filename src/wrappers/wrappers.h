@@ -22,4 +22,6 @@ int Getaddrinfo(const char *host, const char *service,
 
 void Freeaddrinfo(struct addrinfo *result);
 
+int Setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen);  
+
 #endif
