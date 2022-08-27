@@ -4,9 +4,10 @@ int connect_server(char *hostname, int port) {
   struct addrinfo hints, *settings, *setting;
 
   memset(&hints, 0, sizeof(hints));
-  hints.ai_socktype = SOCK_STREAM;
-  hints.ai_flags = AI_NUMERICSERV;
-  hints.ai_flags = AI_ADDRCONFIG;
+  hints.ai_family = AF_UNSPEC; // IPv4 or IPv6
+  hints.ai_socktype = SOCK_STREAM; // TCP
+  hints.ai_flags = AI_PASSIVE; // write my IP
+  hints.ai_flags |= AI_NUMERICSERV; // port is number
 
   Getaddrinfo(hostname, port, &hints, &settings);
   int client_fd;
