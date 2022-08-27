@@ -62,3 +62,13 @@ int Getaddrinfo(const char *host, const char *service,
 }
 
 void Freeaddrinfo(struct addrinfo *result) { freeaddrinfo(result); }
+
+int Setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen) {
+  int status = setsockopt(s, level, optname, optval, optlen);
+  if (status != 0) {
+    errno = status;
+    perror("setsockopt");
+    return -1;
+  }
+  return status;
+}
