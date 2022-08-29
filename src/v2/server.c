@@ -1,6 +1,8 @@
 #include "wrappers.h"
 
-int open_connect(char *port) {
+#define LISTENQ 10
+
+int open_listen_fd(char *port) {
   struct addrinfo *settings, *setting;
   int optval = 1;
   
@@ -13,28 +15,30 @@ int open_connect(char *port) {
   
   Getaddrinfo(NULL, port, &hints, &addrs);
 
-  int server_fd;
-  for (setting = settings; setting; setting = setting->ai_next) {
-    if ((server_fd = socket(setting->ai_family, setting->ai_socktype,
-                           setting->ai_protocol) < 0))
+  int listen_fd, optval;
+  for (struct addrinfo *addr = addrs; addr != NULL; addr = addr->ai_next)
+  {
+    listen_fd = socket(addrs->ai_family, addrs->ai_socktype, addrs->ai_protocol);
+    if (listen_fd == -1)
       continue;
-  
-    Setsockopt((server_fd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
     
-    if (bind(server_fd, setting->ai_addr, setting->ai_addrlen) == 0)
+    Setsockopt((listen_fd, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
+               
+    if (bind(listen_fd, setting->ai_addr, setting->ai_addrlen) == 0)
                break; 
     else
-       close(server_fd); 
+               close(listen_fd);
   }
+   
+  Freeaddrinfo(addrs);
                
-  Freeaddrinfo(settings);
-               
-  if (!setting)
+  if (addr == NULL)
     return -1;
   
- if (listen(server_fd, LISTENQ) < 0) {
-   close(listenfd);
-   return -1; }
-return server_fd;
-  
+ if (listen(listen_fd, LISTENQ) == -1) 
+ {
+   close(listen_fd);
+   return -1; 
+ }
+ return server_fd; 
 }
