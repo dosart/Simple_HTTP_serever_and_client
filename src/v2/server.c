@@ -1,16 +1,18 @@
 #include "wrappers.h"
 
 int open_connect(char *port) {
-  struct addrinfo hints, *settings, *setting;
+  struct addrinfo *settings, *setting;
   int optval = 1;
-
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_socktype = SOCK_STREAM; // TCP
-  hints.ai_flags = AI_PASSIVE; // write my IP
-  hints.ai_flags |= AI_NUMERICSERV; // port is number
-  hints.ai_flags |= AI_ADDRCONFIG;
-
+  
+  struct addrinfo hints = {0}, *addrs;
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_protocol = IPPROTO_TCP;
+  hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
+  hints.ai_flags |= AI_NUMERICSERV;
+  
   Getaddrinfo(hostname, port, &hints, &settings);
+  
   int server_fd;
   for (setting = settings; setting; setting = setting->ai_next) {
     if ((server_fd = socket(setting->ai_family, setting->ai_socktype,
