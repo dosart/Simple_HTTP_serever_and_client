@@ -3,9 +3,7 @@
 #define LISTENQ 10
 
 int open_listen_fd(char *port) {
-  struct addrinfo *settings, *setting;
-  int optval = 1;
-  
+
   struct addrinfo hints = {0}, *addrs;
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
@@ -18,7 +16,7 @@ int open_listen_fd(char *port) {
   int listen_fd, optval;
   for (struct addrinfo *addr = addrs; addr != NULL; addr = addr->ai_next)
   {
-    listen_fd = socket(addrs->ai_family, addrs->ai_socktype, addrs->ai_protocol);
+    listen_fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
     if (listen_fd == -1)
       continue;
     
