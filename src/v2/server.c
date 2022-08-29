@@ -11,8 +11,8 @@ int open_connect(char *port) {
   hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG;
   hints.ai_flags |= AI_NUMERICSERV;
   
-  Getaddrinfo(hostname, port, &hints, &settings);
-  
+  Getaddrinfo(NULL, port, &hints, &addrs);
+
   int server_fd;
   for (setting = settings; setting; setting = setting->ai_next) {
     if ((server_fd = socket(setting->ai_family, setting->ai_socktype,
