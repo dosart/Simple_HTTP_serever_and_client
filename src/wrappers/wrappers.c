@@ -40,7 +40,7 @@ int Listen(int sockfd, int backlog) {
   return status;
 }
 
-int Accept(int listenfd, struct sockaddr *addr, int *addrlen) {
+int Accept(int listenfd, struct sockaddr *addr, socklen_t *addrlen) {
   int status = accept(listenfd, addr, addrlen);
   if (status != 0) {
     errno = status;
@@ -63,11 +63,43 @@ int Getaddrinfo(const char *host, const char *service,
 
 void Freeaddrinfo(struct addrinfo *result) { freeaddrinfo(result); }
 
-int Setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen) {
+int Setsockopt(int s, int level, int optname, const void *optval,
+               socklen_t optlen) {
   int status = setsockopt(s, level, optname, optval, optlen);
   if (status != 0) {
     errno = status;
     perror("setsockopt");
+    return -1;
+  }
+  return status;
+}
+
+int Getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
+                size_t hostlen, char *serv, size_t servlen, int flags) {
+  int status = getnameinfo(sa, salen, host, hostlen, serv, servlen, flags);
+  if (status != 0) {
+    errno = status;
+    perror("getnameinfo");
+    return -1;
+  }
+  return status;
+}
+
+int Send(int sockfd, const void *msg, int len, int flags) {
+  int status = send(sockfd, msg, len, flags);
+  if (status == -1) {
+    errno = status;
+    perror("send");
+    return -1;
+  }
+  return status;
+}
+
+int Recv(int sockfd, void *buf, int len, int flags) {
+  int status = recv(sockfd, buf, len, flags);
+  if (status == -1) {
+    errno = status;
+    perror("recv");
     return -1;
   }
   return status;
