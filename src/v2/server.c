@@ -9,65 +9,40 @@
 
 int open_listen_fd(char *port) {
 
-  struct addrinfo hints, *listp, *p;
-
-  int listenfd, optval = 1;
-
-  /* Получить список потенциальных адресов сервера */
+  struct addrinfo hints, *results, *p;
 
   memset(&hints, 0, sizeof(struct addrinfo));
+  hints.ai_socktype = SOCK_STREAM; //TCP socket
+  hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG; // Write my IP and use IPv4 or IPv6
+  hints.ai_flags |= AI_NUMERICSERV; // Port is number
+  
+  int listen_fd, optval = 1;
+  
+  //Find socket using hints. add socket to list of results
+  Getaddrinfo(NULL, port, &hints, &results);
+  for (p = results; p != NULL; p = p->ai_next) {
+    if ((listen_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0)
+      continue; // Bad luck. Try next address
 
-  hints.ai_socktype = SOCK_STREAM;
-  /* Принимать соединения */
-
-  hints.ai_flags = AI_PASSIVE | AI_ADDRCONFIG; /* ... на любом IP-адресе */
-
-  hints.ai_flags |= AI_NUMERICSERV;
-  /* ... номер порта -- число */
-
-  Getaddrinfo(NULL, port, &hints, &listp);
-  /* Найти адрес сокета, который можно связать */
-
-  for (p = listp; p; p = p->ai_next) {
-
-    /* Создать дескриптор сокета */
-
-    if ((listenfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) < 0)
-
-      continue; /* Неудача, попробовать следующий адрес */
-
-    /* Предотвратить появление ошибки "Адрес уже используется" */
-    Setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR,
-
-               (const void *)&optval, sizeof(int));
-
-    /* Связать дескриптор с адресом */
+    /* Prevent "Address already in use" error */
+    Setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR,(const void *)&optval, sizeof(int));
 
     if (bind(listenfd, p->ai_addr, p->ai_addrlen) == 0)
+      break; // It's luck. 
 
-      break; /* Успех */
-
-    close(listenfd); /* Ошибка, попробовать следующий адрес */
+    close(listen_fd);
   }
+  Freeaddrinfo(results);
 
-  /* Освободить ресурсы */
-
-  Freeaddrinfo(listp);
-
-  if (!p) /* Ни один адрес не подошел */
-
+  if (p == NULL) //All address is wrong
     return -1;
 
-  /* Сделать сокет слушающим и готовым принимать запросы на соединение */
-
-  if (listen(listenfd, LISTENQ) < 0) {
-
-    close(listenfd);
-
+  if (listen(listen_fd, LISTENQ) < 0) {
+    close(listen_fd);
     return -1;
   }
 
-  return listenfd;
+  return listen_fd;
 }
 
 int main() {
@@ -93,8 +68,6 @@ int main() {
       perror("In accept");
       exit(EXIT_FAILURE);
     }
-
-    // connfd = Accept(listenfd, (struct sockaddr *)&clientaddr, &clientlen);
 
     Getnameinfo((struct sockaddr *)&clientaddr, clientlen, client_hostname,
                 MAXLINE,
