@@ -5,8 +5,9 @@
 #include <unistd.h>
 
 #define LISTENQ 10
-#define HOSTNAME_SIZE 2048
-#define PORT_SIZE 64
+#define CLIENT_HOSTNAME_SIZE 2048
+#define CLIENT_PORT_SIZE 64
+#define MESSAGE_FROM_CLIENT_LEN 4096
 
 int open_listen_fd(char *port) {
 
@@ -48,35 +49,41 @@ int open_listen_fd(char *port) {
   return listen_fd;
 }
 
+void set_empty(char *str, size_t str_size) { memset(str, '\0', str_size); }
+
 int main() {
-  int listenfd, connfd;
+  socklen_t client_len;
+  struct sockaddr_storage client_addr;
 
-  socklen_t clientlen;
-  struct sockaddr_storage clientaddr;
-
-  char client_hostname[HOSTNAME_SIZE], client_port[PORT_SIZE];
+  char client_hostname[CLIENT_HOSTNAME_SIZE], client_port[CLIENT_PORT_SIZE];
   char *message_to_client = "HTTP/1.1 200 OK\nContent-Type: "
                             "text/plain\nContent-Length: 12\n\nHello world!";
+  size_t message_to_client_len = strlen(message_to_client);
+  char message_from_client[MESSAGE_FROM_CLIENT_LEN] = {0};
 
-  listenfd = open_listen_fd("29008");
+  int listen_fd, client_fd;
+  listen_fd = open_listen_fd("29008");
   while (1) {
     printf("Server waiting\n\n");
-    clientlen = sizeof(struct sockaddr_storage);
+    client_len = sizeof(struct sockaddr_storage);
 
-    if ((connfd = accept(listenfd, (struct sockaddr *)&clientaddr,
-                         (socklen_t *)&clientlen)) < 0) {
+    if ((client_fd = accept(listen_fd, (struct sockaddr *)&client_addr,
+                            (socklen_t *)&client_len)) < 0) {
       perror("In accept");
       exit(EXIT_FAILURE);
     }
 
-    Getnameinfo((struct sockaddr *)&clientaddr, clientlen, client_hostname,
-                HOSTNAME_SIZE, client_port, PORT_SIZE, 0);
+    Getnameinfo((struct sockaddr *)&client_addr, client_len, client_hostname,
+                CLIENT_HOSTNAME_SIZE, client_port, CLIENT_PORT_SIZE, 0);
     printf("Connected to (%s, %s)\n", client_hostname, client_port);
 
-    char buffer[30000] = {0};
-    read(connfd, buffer, 30000);
-    printf("%s\n", buffer);
-    write(connfd, message_to_client, strlen(message_to_client));
+    read(client_fd, message_from_client, MESSAGE_FROM_CLIENT_LEN);
+    printf("%s\n", message_from_client);
+    write(client_fd, message_to_client, message_to_client_len);
+
+    set_empty(message_from_client, MESSAGE_FROM_CLIENT_LEN);
+    set_empty(client_hostname, CLIENT_HOSTNAME_SIZE);
+    set_empty(client_port, CLIENT_PORT_SIZE);
   }
   return 0;
 }
