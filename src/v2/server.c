@@ -77,9 +77,9 @@ int main() {
                 CLIENT_HOSTNAME_SIZE, client_port, CLIENT_PORT_SIZE, 0);
     printf("Connected to (%s, %s)\n", client_hostname, client_port);
 
-    read(client_fd, message_from_client, MESSAGE_FROM_CLIENT_LEN);
+    recv(client_fd, message_from_client, MESSAGE_FROM_CLIENT_LEN, 0);
     printf("%s\n", message_from_client);
-    write(client_fd, message_to_client, message_to_client_len);
+    send(client_fd, message_to_client, message_to_client_len, 0);
 
     set_empty(message_from_client, MESSAGE_FROM_CLIENT_LEN);
     set_empty(client_hostname, CLIENT_HOSTNAME_SIZE);
