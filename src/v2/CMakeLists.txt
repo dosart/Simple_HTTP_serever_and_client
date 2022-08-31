@@ -7,13 +7,15 @@ set(WRAPPERS_LIB wrappers)
 set(CLIENT client_v2)
 set(SERVER server_v2)
 
-add_executable(${CLIENT} client.c)
+add_executable(${CLIENT} src/main_client.c src/client.c)
 target_link_libraries(${CLIENT} ${WRAPPERS_LIB})
 set_target_properties(${CLIENT} PROPERTIES C_STANDARD 11 C_STANDARD_REQUIRED ON)
+target_include_directories(${CLIENT} PUBLIC include)
 
-add_executable(${SERVER} server.c)
+add_executable(${SERVER} src/main_server.c src/server.c)
 target_link_libraries(${SERVER} ${WRAPPERS_LIB})
 set_target_properties(${SERVER} PROPERTIES C_STANDARD 11 C_STANDARD_REQUIRED ON)
+target_include_directories(${SERVER} PUBLIC include)
      
 add_compile_options(
         -Werror
