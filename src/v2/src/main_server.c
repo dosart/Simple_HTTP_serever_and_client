@@ -18,8 +18,8 @@ int main() {
 
     if ((client_fd = accept(listen_fd, (struct sockaddr *)&client_addr,
                             (socklen_t *)&client_len)) < 0) {
-      perror("In accept");
-      exit(EXIT_FAILURE);
+      errno = client_fd;
+      perror("accept");
     }
 
     Getnameinfo((struct sockaddr *)&client_addr, client_len, client_hostname,
