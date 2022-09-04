@@ -1,4 +1,15 @@
-#include "server.h"
+#include "wrappers.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define LISTENQ 10
+#define CLIENT_HOSTNAME_SIZE 2048
+#define CLIENT_PORT_SIZE 64
+#define MESSAGE_FROM_CLIENT_LEN 4096
+
+void set_empty(char *str, size_t str_size) { memset(str, '\0', str_size); }
 
 int main() {
   socklen_t client_len;
@@ -11,7 +22,7 @@ int main() {
   char message_from_client[MESSAGE_FROM_CLIENT_LEN] = {0};
 
   int listen_fd, client_fd;
-  listen_fd = open_listen_fd("29008");
+  listen_fd = Open_listen_fd("29008", 10);
   while (1) {
     printf("Server waiting\n\n");
     client_len = sizeof(struct sockaddr_storage);

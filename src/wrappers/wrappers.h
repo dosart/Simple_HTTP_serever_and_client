@@ -4,8 +4,10 @@
 #include <errno.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 int Socket(int domain, int type, int protocol);
 
@@ -31,5 +33,13 @@ int Getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 int Send(int sockfd, const void *msg, int len, int flags);
 
 int Recv(int sockfd, void *buf, int len, int flags);
+
+int Open_listen_fd(char *port, int listen_size);
+
+int open_listen_fd(char *port, int listen_size);
+
+int Open_client_fd(char *hostname, char *port);
+
+int open_client_fd(char *hostname, char *port);
 
 #endif

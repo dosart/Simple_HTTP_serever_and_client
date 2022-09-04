@@ -1,8 +1,12 @@
-#include "client.h"
+#include "wrappers.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 int main() {
 
-  int client_fd = open_client_fd("127.0.0.1", "29008");
+  int client_fd = Open_client_fd("127.0.0.1", "29008");
   if (client_fd == -1) {
     perror("open_client_fd");
     return -1;
