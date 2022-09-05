@@ -14,9 +14,7 @@ set_target_properties(${CLIENT} PROPERTIES C_STANDARD 11 C_STANDARD_REQUIRED ON)
 add_executable(${SERVER} main_server.c)
 target_link_libraries(${SERVER} ${WRAPPERS_LIB})
 set_target_properties(${SERVER} PROPERTIES C_STANDARD 11 C_STANDARD_REQUIRED ON)
-
-include_directories(include ../wrappers)
-     
+  
 add_compile_options(
         -Werror
 
