@@ -4,6 +4,12 @@
 #include <string.h>
 #include <unistd.h>
 
+void sigchld_handler(int sig) {
+while (waitpid(-1, 0, WNOHANG) > 0)
+  ;
+return;
+}
+
 int main() {
 
   char *message_to_client = "HTTP/1.1 200 OK\nContent-Type: "
@@ -12,6 +18,7 @@ int main() {
   struct sockaddr_storage client_addr;
   socklen_t client_len = sizeof(struct sockaddr_storage);
 
+  signal(SIGCHLD, sigchld_handler);
   int listen_fd, client_fd;
   listen_fd = Open_listen_fd("29008", 10);
   while (1) {
