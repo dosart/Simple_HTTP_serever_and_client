@@ -1,13 +1,17 @@
 #include "wrappers.h"
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 void sigchld_handler(int sig) {
-while (waitpid(-1, 0, WNOHANG) > 0)
-  ;
-return;
+  while (waitpid(-1, 0, WNOHANG) > 0)
+    ;
+
+  write(0, "Request is done\n", 16);
+  return;
 }
 
 int main() {
@@ -34,8 +38,8 @@ int main() {
       close(listen_fd);
 
       char buffer[2048] = {0};
-      recv(client_fd, buffer, 2048, 0);
-      send(client_fd, message_to_client, strlen(message_to_client), 0);
+      Recv(client_fd, buffer, 2048, 0);
+      Send(client_fd, message_to_client, strlen(message_to_client), 0);
 
       printf("Message from client: %s\n", buffer);
 
