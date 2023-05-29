@@ -7,5 +7,11 @@
 
 ### Modern style. Using function getaddrinfo + system call wrappers.
 
-- [Server](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v2/server.c)
-- [Client](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v2/client.c)
+- [Server](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v2/main_server.c)
+- [Client](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v2/main_client.c)
+
+### Using fork system call for new client
+
+- [Server](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v3/main_server.c)
+- [Client](https://github.com/dosart/Simple_HTTP_server_and_client/blob/main/src/v3/main_client.c)
+
