@@ -118,7 +118,7 @@ int open_listen_fd(const char *port, int listen_size) {
   struct addrinfo hints, *results, *p;
 
   memset(&hints, 0, sizeof(struct addrinfo));
-  hints.ai_socktype = SOCK_STREAM;  // TCP socket
+  hints.ai_socktype = SOCK_STREAM; // TCP socket
   hints.ai_flags =
       AI_PASSIVE | AI_ADDRCONFIG;   // Write my IP and use IPv4 or IPv6
   hints.ai_flags |= AI_NUMERICSERV; // Port is number
@@ -179,7 +179,7 @@ int open_client_fd(char *hostname, char *port) {
       continue; // Bad luck. Try next address
 
     if (connect(client_fd, p->ai_addr, p->ai_addrlen) != -1)
-      break;          // It's luck.
+      break; // It's luck.
 
     close(client_fd); // Bad luck. Close the socket
   }
