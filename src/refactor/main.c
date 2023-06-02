@@ -21,6 +21,7 @@ int main(int argc, char const *argv[]) {
 
   if (argc < 3) {
     printf("Usage: server [port] [%s]\n", label);
+    free(label);
     return 1;
   }
 
@@ -35,6 +36,7 @@ int main(int argc, char const *argv[]) {
   int method_index = 0;
   if ((method_index = find_method(method, method_names, size)) == -1) {
     printf("Unknown  method. Use  %s.\n", label);
+    free(label);
     return 1;
   }
 
