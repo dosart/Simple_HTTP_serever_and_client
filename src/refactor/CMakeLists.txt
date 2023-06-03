@@ -19,4 +19,4 @@ add_compile_options(
         -Wsign-conversion
 )
 
-add_executable(srever main.c wrappers.h wrappers.c methods.c methods.h)
+add_executable(srever main.c wrappers.h wrappers.c methods.c methods.h utils.c)
