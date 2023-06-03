@@ -1,7 +1,22 @@
-cmake_minimum_required(VERSION 3.22)
-project(srever C)
+###################################################################################################
+##
+##      Information about the project
+##
+###################################################################################################
 
-set(CMAKE_C_STANDARD 11)
+cmake_minimum_required(VERSION 3.16)
+
+set(PROJECT_NAME server)
+project(${PROJECT_NAME} VERSION 1.0.0
+        DESCRIPTION "Server"
+        LANGUAGES C
+        )
+
+###################################################################################################
+##
+##      Compilation options
+##
+###################################################################################################
 
 add_compile_options(
         -Werror
@@ -18,5 +33,31 @@ add_compile_options(
         -Wredundant-decls
         -Wsign-conversion
 )
+###################################################################################################
+##
+##      Source files
+##
+###################################################################################################
 
-add_executable(srever main.c wrappers.h wrappers.c methods.c methods.h utils.c)
+set(PROJECT_INCLUDE_DIR include)
+
+add_executable(${PROJECT_NAME})
+set_target_properties(
+        ${PROJECT_NAME} PROPERTIES
+        C_STANDARD 11
+        C_STANDARD_REQUIRED ON
+)
+
+target_sources(
+        ${PROJECT_NAME}
+        PRIVATE
+        src/main.c
+        src/wrappers.c
+        src/methods.c 
+        src/utils.c
+)
+target_include_directories(
+        ${PROJECT_NAME}
+        PRIVATE
+        ${PROJECT_INCLUDE_DIR}
+)
