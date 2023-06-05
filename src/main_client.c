@@ -4,16 +4,16 @@
 #include <string.h>
 #include <unistd.h>
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char *argv[]) {
 
   if (argc < 3) {
     printf("Usage: client [ip] [port]\n");
     return 1;
   }
 
-  const char *ip = argv[1];
+  char *ip = argv[1];
 
-  const char *str_port = argv[2];
+  char *str_port = argv[2];
   unsigned long int_port = strtoul(str_port, NULL, 0);
   if (int_port < 1 || int_port > 65535) {
     printf("You must enter a valid port number.\n");

@@ -17,7 +17,7 @@ void using_simple(int server_fd) {
   int client_fd;
   while (1) {
     printf("Server waiting\n\n");
-    if ((client_fd = Accept(server_fd, (struct sockaddr *)&client_addr,
+    if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
                             (socklen_t *)&address_len)) == -1) {
       exit(EXIT_FAILURE);
     }
@@ -56,7 +56,7 @@ void using_fork(int server_fd) {
   while (1) {
     printf("Server waiting\n\n");
 
-    if ((client_fd = Accept(server_fd, (struct sockaddr *)&client_addr,
+    if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
                             (socklen_t *)&address_len)) == -1) {
       exit(EXIT_FAILURE);
     }
@@ -107,7 +107,7 @@ void using_select(int server_fd) {
     for (int i = 1; i <= maxfd; ++i) {
       if (FD_ISSET(i, &ready_set)) {
         if (i == server_fd) {
-          if ((client_fd = Accept(server_fd, (struct sockaddr *)&client_addr,
+          if ((client_fd = accept(server_fd, (struct sockaddr *)&client_addr,
                                   (socklen_t *)&address_len)) == -1) {
             exit(EXIT_FAILURE);
           }

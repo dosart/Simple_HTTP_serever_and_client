@@ -40,16 +40,6 @@ int Listen(int sockfd, int backlog) {
   return status;
 }
 
-int Accept(int listenfd, struct sockaddr *addr, socklen_t *addrlen) {
-  int status = accept(listenfd, addr, addrlen);
-  if (status != 0) {
-    errno = status;
-    perror("accept");
-    return -1;
-  }
-  return status;
-}
-
 int Getaddrinfo(const char *host, const char *service,
                 const struct addrinfo *hints, struct addrinfo **result) {
   int status = getaddrinfo(host, service, hints, result);
