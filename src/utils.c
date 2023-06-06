@@ -5,15 +5,14 @@ static const char *method_names[] = {"simple", "fork", "select", "pool",
 
 static int size = sizeof(method_names) / sizeof(method_names[0]);
 
-static func_type method_funcs[] = {using_simple, using_fork, using_select};
+static func_type method_funcs[] = {using_simple, using_fork, using_select,
+                                   using_poll};
 
 static char *join(const char **strings, int num_strings);
 
 static int get_index(const char *method, const char *method_names[], int size);
 
-char *make_label(void) {
-  return join(method_names, size);
-}
+char *make_label(void) { return join(method_names, size); }
 
 static char *join(const char **strings, int num_strings) {
   int i = 0;
